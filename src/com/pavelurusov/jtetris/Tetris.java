@@ -174,7 +174,7 @@ public class Tetris extends Application {
                 currentPiece.moveRight();
             }
         } else if (code == KeyCode.SPACE || code == KeyCode.UP || code == KeyCode.KP_UP) {
-            nextRotation = currentPiece.getRotation() + 1;
+            nextRotation++;
             if(!collision(nextX, nextY, nextRotation)) {
                 currentPiece.rotate();
             }
