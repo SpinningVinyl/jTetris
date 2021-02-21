@@ -21,7 +21,6 @@ import java.util.Random;
 /**
  * @author Pavel Urusov, me@pavelurusov.com
  * A quick and dirty Tetris clone.
- *
  */
 
 public class Tetris extends Application {
@@ -113,8 +112,6 @@ public class Tetris extends Application {
         gameTimer.start();
     }
 
-
-
     // this method implements the main game loop
     private void tick() {
         // clear the landed pile of all filled lines
@@ -125,7 +122,7 @@ public class Tetris extends Application {
         drawPiece();
 
         int nextY = currentPiece.getY() + 1;
-        if (nextY >= 0) { // this check is necessary since the piece starts outside of the game board
+        if (nextY >= 0) { // this check is necessary since the pieces spawn outside of the game board
             // if the piece can't advance, add it to the landed pile
             if (collision(currentPiece.getX(), nextY)) {
                 for (int px = 0; px < 4; px++) {
@@ -153,6 +150,7 @@ public class Tetris extends Application {
         currentPiece.advance();
     }
 
+//    handle mouse input
     private void mouseClicked(MouseEvent e) {
         startNewGame();
     }
@@ -179,6 +177,7 @@ public class Tetris extends Application {
         }
     }
 
+//    draws the current piece on the screen at its current position
     private void drawPiece() {
         int startRow = currentPiece.getY();
         int startColumn = currentPiece.getX();
@@ -197,6 +196,7 @@ public class Tetris extends Application {
         }
     }
 
+//    draws the next piece on the nextPieceDisplay
     private void showNextPiece() {
         if (nextPiece != null) {
             for (int y = 0; y < 4; y++) {
@@ -207,6 +207,7 @@ public class Tetris extends Application {
         }
     }
 
+//    collision detection
     private boolean collision(int x, int y, int r) {
         for (int px = 0; px < 4; px++) {
             for(int py = 0; py < 4; py++) {
@@ -229,9 +230,8 @@ public class Tetris extends Application {
         return collision(x, y, currentPiece.getRotation());
     }
 
-
+    // draw the landed pile on the game board
     private void drawLanded() {
-        // draw the landed pile on the game board
         for(int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
                 boardDisplay.setCellColor(row, column, landed[row][column]);

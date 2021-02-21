@@ -4,8 +4,7 @@ import javafx.scene.paint.Color;
 
 /**
  * @author Pavel Urusov, me@pavelurusov.com
- * This class implements a tetromino (Tetris piece) used by my Tetris clone.
- *
+ * This class implements the tetromino (Tetris piece) for my Tetris clone.
  */
 
 public class Tetromino {
@@ -33,10 +32,6 @@ public class Tetromino {
             throw new IllegalArgumentException("Wrong tetromino type.");
         }
         this.type = type;
-    }
-
-    public void rotate() {
-        rotation++;
     }
 
     // returns the color at px,py
@@ -67,6 +62,8 @@ public class Tetromino {
         return null;
     }
 
+//    useful getters
+
     public int getX() {
         return x;
     }
@@ -83,6 +80,8 @@ public class Tetromino {
         return rotation;
     }
 
+//    movements
+
     public void advance() {
         y++;
     };
@@ -93,5 +92,9 @@ public class Tetromino {
 
     public void moveRight() {
         x++;
+    }
+
+    public void rotate() {
+        rotation++;
     }
 }
