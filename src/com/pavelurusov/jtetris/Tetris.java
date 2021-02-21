@@ -136,7 +136,7 @@ public class Tetris extends Application {
                     }
                 }
                 // if the landed piece is too close to the top edge, go into the game over state
-                if (currentPiece.getY() <= 2) {
+                if (currentPiece.getY() <= 1) {
                     gameTimer.stop();
                     currentLevelLabel.setText("Game over!");
                     newGameButton.setDisable(false);
