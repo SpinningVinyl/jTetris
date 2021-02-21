@@ -52,6 +52,7 @@ public class Tetris extends Application {
         boardDisplay = new SquareGrid(rows, columns, 20);
         landed = new Color[rows][columns];
         boardDisplay.setAlwaysDrawGrid(false);
+        boardDisplay.setAutomaticRedraw(false);
         boardDisplay.setStyle("-fx-border-color: darkgray; -fx-border-width: 5px");
 
 //      setting up the next piece display
@@ -148,6 +149,7 @@ public class Tetris extends Application {
         }
         // move the current piece one row down
         currentPiece.advance();
+        boardDisplay.redraw();
     }
 
 //    handle mouse input
@@ -159,22 +161,30 @@ public class Tetris extends Application {
     private void keyPressed(KeyEvent e) {
         KeyCode code = e.getCode();
         int nextX = currentPiece.getX();
+        int nextY = currentPiece.getY();
+        int nextRotation = currentPiece.getRotation();
         if (code == KeyCode.LEFT || code == KeyCode.KP_LEFT) {
             nextX--;
-            if (!collision(nextX, currentPiece.getY())) {
+            if (!collision(nextX, nextY)) {
                 currentPiece.moveLeft();
             }
         } else if (code == KeyCode.RIGHT || code == KeyCode.KP_RIGHT) {
             nextX++;
-            if (!collision(nextX, currentPiece.getY())) {
+            if (!collision(nextX, nextY)) {
                 currentPiece.moveRight();
             }
         } else if (code == KeyCode.SPACE || code == KeyCode.UP || code == KeyCode.KP_UP) {
-            int nextRotation = currentPiece.getRotation() + 1;
-            if(!collision(currentPiece.getX(), currentPiece.getY(), nextRotation)) {
+            nextRotation = currentPiece.getRotation() + 1;
+            if(!collision(nextX, nextY, nextRotation)) {
                 currentPiece.rotate();
             }
+        } else if (code == KeyCode.DOWN || code == KeyCode.KP_DOWN) {
+            nextY++;
+            if(!collision(nextX, nextY)) {
+                currentPiece.advance();
+            }
         }
+        boardDisplay.redraw();
     }
 
 //    draws the current piece on the screen at its current position
