@@ -4,8 +4,8 @@ CHANGELOG
 
 *** v0.3 ***
 Bugfixes:
-- Fixed a very annoying bug where if the landed pile was close to the edge of
-the visible area, the game would occasionally crash with NullPointerException.
+- Fixed a very annoying bug where if the landed pile was close to the top edge 
+of the visible area, the game would occasionally crash with NullPointerException.
 - Fixed a bug where the newly spawned tetromino couldn't be moved or rotated
 until it was fully in the visible area of the well. 
 
