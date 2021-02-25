@@ -33,7 +33,7 @@ public class Tetris extends Application {
 
     private double interval = 5e8; // 5*10^8 nanoseconds - this value determines the speed of the game
 
-    private final int rows = 18;
+    private final int rows = 22;
     private final int columns = 12;
     private int score = 0;
     private int level = 1; // the game starts at level 1
@@ -49,7 +49,7 @@ public class Tetris extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // setting up the game board
-        boardDisplay = new SquareGrid(rows, columns, 20);
+        boardDisplay = new SquareGrid(rows - 4, columns, 20);
         landed = new Color[rows][columns];
         boardDisplay.setAlwaysDrawGrid(false);
         boardDisplay.setAutomaticRedraw(false);
@@ -123,30 +123,29 @@ public class Tetris extends Application {
         drawPiece();
 
         int nextY = currentPiece.getY() + 1;
-        if (nextY >= 0) { // this check is necessary since the pieces spawn outside of the game board
-            // if the piece can't advance, add it to the landed pile
-            if (collision(currentPiece.getX(), nextY)) {
-                for (int px = 0; px < 4; px++) {
-                    for (int py = 0; py < 4; py++) {
-                        int row = currentPiece.getY() + py;
-                        int column = currentPiece.getX() + px;
-                        if (currentPiece.atPos(px, py) != null && currentPiece.getY() >= 0) {
-                            landed[row][column] = currentPiece.atPos(px, py);
-                        }
+        // if the piece can't advance, add it to the landed pile
+        if (collision(currentPiece.getX(), nextY)) {
+            for (int px = 0; px < 4; px++) {
+                for (int py = 0; py < 4; py++) {
+                    int row = currentPiece.getY() + py;
+                    int column = currentPiece.getX() + px;
+                    if (currentPiece.atPos(px, py) != null && currentPiece.getY() >= 0) {
+                        landed[row][column] = currentPiece.atPos(px, py);
                     }
                 }
-                // if the landed piece is too close to the top edge, go into the game over state
-                if (currentPiece.getY() <= 1) {
-                    gameTimer.stop();
-                    currentLevelLabel.setText("Game over!");
-                    newGameButton.setDisable(false);
-                } else { // else create new tetrominoes
-                    currentPiece = new Tetromino(nextPiece.getType());
-                    nextPiece = new Tetromino(rnd.nextInt(7));
-                    showNextPiece();
-                }
+            }
+            // if the landed piece is too close to the top edge, go into the game over state
+            if (currentPiece.getY() <= 1) {
+                gameTimer.stop();
+                currentLevelLabel.setText("Game over!");
+                newGameButton.setDisable(false);
+            } else { // else create new tetrominoes
+                currentPiece = new Tetromino(nextPiece.getType());
+                nextPiece = new Tetromino(rnd.nextInt(7));
+                showNextPiece();
             }
         }
+
         // move the current piece one row down
         currentPiece.advance();
         boardDisplay.redraw();
@@ -189,7 +188,7 @@ public class Tetris extends Application {
 
 //    draws the current piece on the screen at its current position
     private void drawPiece() {
-        int startRow = currentPiece.getY();
+        int startRow = currentPiece.getY() - 4;
         int startColumn = currentPiece.getX();
         for (int px = 0; px < 4; px++) {
             for (int py = 0; py < 4; py++) {
@@ -224,7 +223,7 @@ public class Tetris extends Application {
                 int row = y + py;
                 int column = x + px;
                 if (currentPiece.atPos(px, py, r) != null) {
-                    if (row < 0 || row > (rows - 1)
+                    if (row > (rows - 1)
                             || column < 0 || column > (columns - 1)) {
                         return true;
                     } else if (landed[row][column] != null) {
@@ -244,7 +243,7 @@ public class Tetris extends Application {
     private void drawLanded() {
         for(int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                boardDisplay.setCellColor(row, column, landed[row][column]);
+                boardDisplay.setCellColor(row - 4, column, landed[row][column]);
             }
         }
     }

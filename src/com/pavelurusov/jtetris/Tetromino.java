@@ -11,7 +11,7 @@ public class Tetromino {
 
     private int rotation = 0; // all new pieces spawn rotated 0 degrees
     private int type; // Tetromino type, 0 to 6
-    private int x = 4, y = -3; // coordinates of the upper left corner of the piece
+    private int x = 4, y = 0; // coordinates of the upper left corner of the piece
     private final String[] tetromino = { "0100010001000100",   // I-tetromino
                                          "0100011000100000",   // S-tetromino
                                          "0000011001100000",   // O-tetromino
