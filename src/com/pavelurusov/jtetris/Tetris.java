@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Pavel Urusov, me@pavelurusov.com
@@ -43,8 +43,6 @@ public class Tetris extends Application {
     private Tetromino currentPiece;
     private Tetromino nextPiece;
 
-    private Random rnd = new Random();
-
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -62,7 +60,7 @@ public class Tetris extends Application {
         Label nextPieceLabel = new Label("Next piece:");
 
 //      setting up various UI elements
-        Label controlsHintLabel = new Label("← Move left | → Move right | [SPC] / ↑ Rotate");
+        Label controlsHintLabel = new Label("← Move left | → Move right | ↑ Rotate | ↓ Drop");
         scoreLabel = new Label();
         scoreLabel.setFont(Font.font("System", 22));
         scoreLabel.setStyle("-fx-text-fill: #770033; -fx-label-padding: 25px 0 0 0;");
@@ -107,8 +105,8 @@ public class Tetris extends Application {
         primaryStage.show();
 
         // setting the game state and starting the game loop
-        currentPiece = new Tetromino(rnd.nextInt(7));
-        nextPiece = new Tetromino(rnd.nextInt(7));
+        currentPiece = new Tetromino(ThreadLocalRandom.current().nextInt(0,7));
+        nextPiece = new Tetromino(ThreadLocalRandom.current().nextInt(0,7));
         showNextPiece();
         gameTimer.start();
     }
@@ -129,19 +127,19 @@ public class Tetris extends Application {
                 for (int py = 0; py < 4; py++) {
                     int row = currentPiece.getY() + py;
                     int column = currentPiece.getX() + px;
-                    if (currentPiece.atPos(px, py) != null && currentPiece.getY() >= 0) {
+                    if (currentPiece.atPos(px, py) != null) {
                         landed[row][column] = currentPiece.atPos(px, py);
                     }
                 }
             }
-            // if the landed piece is too close to the top edge, go into the game over state
-            if (currentPiece.getY() <= 1) {
+            // if the landed piece is at the top edge or higher, go into the game over state
+            if (currentPiece.getY() <= 4) {
                 gameTimer.stop();
                 currentLevelLabel.setText("Game over!");
                 newGameButton.setDisable(false);
             } else { // else create new tetrominoes
                 currentPiece = new Tetromino(nextPiece.getType());
-                nextPiece = new Tetromino(rnd.nextInt(7));
+                nextPiece = new Tetromino(ThreadLocalRandom.current().nextInt(0,7));
                 showNextPiece();
             }
         }
@@ -183,6 +181,9 @@ public class Tetris extends Application {
                 currentPiece.advance();
             }
         }
+        boardDisplay.clearGrid();
+        drawLanded();
+        drawPiece();
         boardDisplay.redraw();
     }
 
@@ -283,18 +284,27 @@ public class Tetris extends Application {
         scoreLabel.setText(String.valueOf(score));
 
         // level advancement
-        if(score >= 6000) {
-            level = 5;
+        if(score >= 9000) {
+            level = 6;
             interval = 1e8;
+            boardDisplay.setDefaultColor(Color.web("#555555"));
+        }
+        else if(score >= 6000) {
+            level = 5;
+            interval = 1.5e8;
+            boardDisplay.setDefaultColor(Color.web("#444444"));
         } else if(score >= 4500) {
             level = 4;
             interval = 2e8;
+            boardDisplay.setDefaultColor(Color.web("#333333"));
         } else if(score >= 3000) {
             level = 3;
             interval = 3e8;
+            boardDisplay.setDefaultColor(Color.web("#222222"));
         } else if(score >= 1500) {
             level = 2;
             interval = 4e8;
+            boardDisplay.setDefaultColor(Color.web("#111111"));
         }
         currentLevelLabel.setText("Level: " + level);
     }
@@ -320,8 +330,8 @@ public class Tetris extends Application {
         newGameButton.setDisable(true);
 
         // generate new pieces
-        currentPiece = new Tetromino(rnd.nextInt(7));
-        nextPiece = new Tetromino(rnd.nextInt(7));
+        currentPiece = new Tetromino(ThreadLocalRandom.current().nextInt(0,7));
+        nextPiece = new Tetromino(ThreadLocalRandom.current().nextInt(0,7));
         showNextPiece();
 
         // restart the game loop

@@ -2,6 +2,17 @@ jTetris
 (c) 2021 Pavel Urusov, me@pavelurusov.com
 CHANGELOG
 
+*** v0.4 ***
+Bugfixes:
+- Fixed a bug where game over could be triggered too early.
+
+Improvements:
+- Finally reduced input lag to the point of imperceptibility.
+- The background of the well now changes with each level (I was told that level
+progression was not immediately obvious before this change).
+- Level 5 is now significantly more playable than before.
+- Added new level (level 6) which is about the same as level 5 was previously.
+
 *** v0.3 ***
 Bugfixes:
 - Fixed a very annoying bug where if the landed pile was close to the top edge 
