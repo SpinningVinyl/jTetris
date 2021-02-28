@@ -327,6 +327,7 @@ public class Tetris extends Application {
         level = 1;
         score = 0;
         interval = 5e8;
+        boardDisplay.setDefaultColor(Color.BLACK);
         newGameButton.setDisable(true);
 
         // generate new pieces
